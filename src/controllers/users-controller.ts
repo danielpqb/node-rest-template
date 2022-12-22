@@ -11,7 +11,8 @@ export async function signUp(req: Request, res: Response) {
       id: user.id,
       email: user.email,
     });
-  } catch (error) {
+  }
+  catch (error) {
     if (error.name === "DuplicatedEmailError") {
       return res.status(httpStatus.CONFLICT).send(error);
     }

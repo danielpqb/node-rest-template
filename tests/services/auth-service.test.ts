@@ -1,9 +1,10 @@
 import { init } from "@/app";
 import { prisma } from "@/config";
-import authenticationService, { invalidCredentialsError } from "@/services/authentication-service";
-import faker from "@faker-js/faker";
+import { invalidCredentialsError } from "@/errors/invalid-credentials-error";
+import { faker } from "@faker-js/faker";
 import { createUser } from "../factories";
 import { cleanDb } from "../helpers";
+import authenticationService from "@/services/auth-service";
 
 beforeAll(async () => {
   await init();
@@ -22,7 +23,8 @@ describe("signIn", () => {
     try {
       await authenticationService.signIn(params);
       fail("should throw InvalidCredentialError");
-    } catch (error) {
+    }
+    catch (error) {
       expect(error).toEqual(invalidCredentialsError());
     }
   });
@@ -37,7 +39,8 @@ describe("signIn", () => {
     try {
       await authenticationService.signIn(params);
       fail("should throw InvalidCredentialError");
-    } catch (error) {
+    }
+    catch (error) {
       expect(error).toEqual(invalidCredentialsError());
     }
   });

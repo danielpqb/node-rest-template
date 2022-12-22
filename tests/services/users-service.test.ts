@@ -1,10 +1,11 @@
 import { init } from "@/app";
 import { prisma } from "@/config";
-import userService, { duplicatedEmailError } from "@/services/users-service";
-import faker from "@faker-js/faker";
+import { duplicatedEmailError } from "@/errors/duplicated-email-error";
+import userService from "@/services/users-service";
+import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
-import { createUser as createUserSeed, createEvent as createEventSeed } from "../factories";
 import { cleanDb } from "../helpers";
+import { createUser as createUserSeed } from "../factories";
 
 beforeAll(async () => {
   await init();
@@ -14,7 +15,6 @@ beforeAll(async () => {
 describe("createUser", () => {
   it("should throw duplicatedUserError if there is a user with given email", async () => {
     const existingUser = await createUserSeed();
-    await createEventSeed();
 
     try {
       await userService.createUser({
@@ -22,7 +22,8 @@ describe("createUser", () => {
         password: faker.internet.password(6),
       });
       fail("should throw duplicatedUserError");
-    } catch (error) {
+    }
+    catch (error) {
       expect(error).toEqual(duplicatedEmailError());
     }
   });
