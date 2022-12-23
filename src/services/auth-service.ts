@@ -6,7 +6,7 @@ import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-async function signIn(params: SignInParams): Promise<SignInResult> {
+export async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
 
   const user = await getUserOrFail(email);
@@ -21,18 +21,18 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
   };
 }
 
-async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
+export async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
   const user = await userRepository.findByEmail(email, { id: true, email: true, password: true });
   if (!user) throw invalidCredentialsError();
   return user;
 }
 
-async function validatePasswordOrFail(password: string, userPassword: string) {
+export async function validatePasswordOrFail(password: string, userPassword: string) {
   const isPasswordValid = await bcrypt.compare(password, userPassword);
   if (!isPasswordValid) throw invalidCredentialsError();
 }
 
-async function createSession(userId: number) {
+export async function createSession(userId: number) {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET);
   await sessionRepository.create({
     token,
@@ -50,9 +50,3 @@ type SignInResult = {
 };
 
 type GetUserOrFailResult = Pick<User, "id" | "email" | "password">;
-
-const authenticationService = {
-  signIn,
-};
-
-export default authenticationService;

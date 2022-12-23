@@ -1,4 +1,4 @@
-import { RequestError } from "@/protocols";
+import { RequestError } from "@/types";
 
 export function requestError(status: number, statusText: string): RequestError {
   return {
