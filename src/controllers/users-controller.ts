@@ -1,3 +1,4 @@
+import { AuthenticatedRequest } from "@/middlewares";
 import { OAuthParams } from "@/schemas";
 import * as authService from "@/services/auth-service";
 import * as userService from "@/services/users-service";
@@ -51,4 +52,11 @@ export async function oAuth(req: Request, res: Response) {
     }
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }
+}
+
+export async function getUserData(req: AuthenticatedRequest, res: Response) {
+  const userId = req.userId;
+
+  const user = await userService.getUserById(userId);
+  return res.status(httpStatus.OK).send({ user });
 }

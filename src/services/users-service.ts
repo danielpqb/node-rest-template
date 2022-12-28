@@ -10,6 +10,11 @@ export async function checkIfUserExists(email: string) {
   return true;
 }
 
+export async function getUserById(id: number) {
+  const user = await userRepository.findById(id);
+  return user;
+}
+
 export async function getUserByEmail(email: string) {
   const user = await userRepository.findByEmail(email);
   return user;
