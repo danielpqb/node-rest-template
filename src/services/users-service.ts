@@ -12,6 +12,10 @@ export async function checkIfUserExists(email: string) {
 
 export async function getUserById(id: number) {
   const user = await userRepository.findById(id);
+
+  delete user.password;
+  delete user.updatedAt;
+  
   return user;
 }
 
